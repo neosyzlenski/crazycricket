@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -58,7 +57,7 @@ public class CrazyCricketServiceTest {
 	@BeforeClass
 	public static void setUp(){
 		db = new EmbeddedDatabaseBuilder()
-				.addScript(new ClassPathResource("schema.sql").getPath())
+				.addScript("schema.sql")
 				.addScript("test-data.sql")
 				.build();
 	}
@@ -79,11 +78,10 @@ public class CrazyCricketServiceTest {
                 	.andExpect(jsonPath("$[2]", hasEntry("sachin", 4)))
                 	.andExpect(jsonPath("$[3]", hasEntry("andrew", 1)))
                 	.andExpect(jsonPath("$[4]", hasEntry("imran", 1)));
-		
     }
 	
 	@Test
-    public void testLeaderBoardWithDateRange() throws Exception{    	
+    public void testLeaderBoardWithStartDateGreaterThanOrEqualsEndDate() throws Exception{    	
 		mvc.perform(get("/api/leaderboard?start=20160101&end=20160101")
             	.accept(MediaType.APPLICATION_JSON))
             	.andExpect(status().isOk())
@@ -93,6 +91,14 @@ public class CrazyCricketServiceTest {
             	.andExpect(jsonPath("$[2]", hasEntry("imran", 1)))
             	.andExpect(jsonPath("$[3]", hasEntry("sachin", 1)))
             	.andExpect(jsonPath("$[4]", hasEntry("shubham", 1)));
+    }
+	
+	@Test
+    public void testLeaderBoardWithEndDateGreaterThanStartDate() throws Exception{    	
+		mvc.perform(get("/api/leaderboard?start=20160301&end=20160101")
+            	.accept(MediaType.APPLICATION_JSON))
+            	.andExpect(status().isOk())
+            	.andExpect(jsonPath("$", hasSize(0)));
     }
 	
     @Test
@@ -108,7 +114,7 @@ public class CrazyCricketServiceTest {
     }
     
     @Test
-    public void testNationalLeaderBoardWithDateRange() throws Exception{    	
+    public void testNationalLeaderBoardWithStartDateGreaterThanOrEqualsEndDate() throws Exception{    	
     	mvc.perform(get("/api/national_leaderboard?start=20160101&end=20160101")
             	.accept(MediaType.APPLICATION_JSON))
             	.andExpect(status().isOk())
@@ -117,5 +123,13 @@ public class CrazyCricketServiceTest {
             	.andExpect(jsonPath("$[1]", hasEntry("India", 2)))
             	.andExpect(jsonPath("$[2]", hasEntry("Pakistan", 1)))
             	.andExpect(jsonPath("$[3]", hasEntry("USA", 1)));
+    }
+    
+    @Test
+    public void testNationalLeaderBoardWithEndDateGreaterThanStartDate() throws Exception{    	
+    	mvc.perform(get("/api/national_leaderboard?start=20160201&end=20160101")
+            	.accept(MediaType.APPLICATION_JSON))
+            	.andExpect(status().isOk())
+            	.andExpect(jsonPath("$", hasSize(0)));
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * Service configuration details
+ * REST Service configuration details
  * 
  * @author Kapil
  * Created: Jul 1, 2016

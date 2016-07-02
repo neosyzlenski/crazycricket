@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import com.bfm.acs.crazycricket.CrazyCricketProtos.Game;
 
 /**
- * HSQL DB implementation for persistent data storage
+ * HSQL DB implementation for data store
  * 
  * @author Kapil
  * Created: Jun 30, 2016
@@ -40,8 +40,10 @@ public class HsqlDataStoreImpl implements DataStore{
 	 */
 	@Override
 	public void save(Game game) {
-		LOG.info(String.format("Saving game: %s, %s, %s, %s", game.getWinner(), game.getLoser(), 
-								new Date(game.getGameDate()), game.getType().name()));
+		LOG.info(String.format("Saving game: Winner-%s(%s), Loser-%s(%s), Date-%s, Type-%s", 
+				game.getWinner().getUserId(), game.getWinner().getCountry(), 
+				game.getLoser().getUserId(), game.getLoser().getCountry(),
+				new Date(game.getGameDate()), game.getType().name()));
 		
 		PlayerInfo winner = new PlayerInfo(game.getWinner().getUserId(), game.getWinner().getCountry());
 		winner = savePlayer(winner);

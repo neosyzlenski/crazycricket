@@ -19,6 +19,7 @@ import com.bfm.acs.crazycricket.data.DataStore;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
+ * Processor thread for consuming game events and persisting them to data store
  * 
  * @author Kapil
  * Created: Jun 30, 2016
@@ -27,10 +28,10 @@ import com.google.protobuf.InvalidProtocolBufferException;
 public class KafkaProcessor implements Runnable{
 	private static final Logger LOG = LoggerFactory.getLogger(KafkaProcessor.class);
 	
-	private final KafkaConsumer consumer;
-	private final DataStore 	dataStore;
-	private final String		kafkaBroker;
-	private final String[]		topics;
+	private final KafkaConsumer<String, byte[]> consumer;
+	private final DataStore 					dataStore;
+	private final String						kafkaBroker;
+	private final String[]						topics;
 
 	//Flag to kill the processor
 	private AtomicBoolean stopped = new AtomicBoolean(false);
@@ -76,13 +77,17 @@ public class KafkaProcessor implements Runnable{
 		consumer.wakeup();
 	}
 	
+	/**
+	 * Helper to setup and return Kafka consumer configuration
+	 * 
+	 * @return config
+	 */
 	private Properties getKafkaConfig(){
 		Properties props = new Properties();
 		
 		props.put("bootstrap.servers", this.kafkaBroker);
 	    props.put("group.id", "test");
-	    //Manual offset control
-	    props.put("enable.auto.commit", "false");
+	    props.put("enable.auto.commit", "true");
 	    props.put("auto.commit.interval.ms", "1000");
 	    props.put("session.timeout.ms", "30000");
 	    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");

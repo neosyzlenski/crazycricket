@@ -8,10 +8,17 @@ import com.bfm.acs.crazycricket.data.DataStore;
 import com.bfm.acs.crazycricket.kafka.KafkaProcessor;
 import com.bfm.acs.crazycricket.rest.CrazyCricketServiceConfig;
 
+/**
+ * Main application class to publish REST API and trigger Kafka processor
+ * 
+ * @author Kapil
+ * Created: Jun 30, 2016
+ *
+ */
 @SpringBootApplication
 public class Application{    
 	public static void main(final String[] args) throws InterruptedException {
-		//Trigger spring application and REST service
+		//Trigger Spring application and REST service
     	ApplicationContext app = SpringApplication.run(Application.class, args);
     	CrazyCricketServiceConfig serviceConfig = app.getBean(CrazyCricketServiceConfig.class);
     	System.out.println("Crazy Cricket REST Service started at: " + serviceConfig.toString());
