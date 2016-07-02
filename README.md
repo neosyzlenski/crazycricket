@@ -4,10 +4,7 @@ Proposed solution for Crazy Cricket challenge asked by [Black Rock](https://gith
 
 ## Setup & Run
 ```
-Requires - JDK 8
-
 mvn clean package
 
 Generates crazycricket-SNAPSHOT.jar in target/
-
 ```
