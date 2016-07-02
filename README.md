@@ -4,7 +4,7 @@ Proposed solution for Crazy Cricket challenge asked by [Black Rock](https://gith
 
 ## Setup & Run
 ```
-Required - JDK 8
+Requires - JDK 8
 
 mvn clean package
 
