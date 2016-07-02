@@ -6,7 +6,9 @@ Proposed solution for Crazy Cricket challenge asked by [Black Rock](https://gith
 ```
 mvn clean package
 
-java -jar target/crazycricket-SNAPSHOT.jar <your kafka broker like localhost:9092>
+chmod +x bin/run.sh
+
+bin/run.sh <your kafka broker like localhost:9092>
 ...
 Crazy Cricket REST Service started at: http://localhost:8292 <you can modify port in src/main/resources/application.properties>
 ...

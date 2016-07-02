@@ -6,4 +6,4 @@
 ## Created - July 2, 2016
 ############################################################
 
-java -jar target/crazycricket-SNAPSHOT.jar $1
+java -jar ../target/crazycricket-SNAPSHOT.jar $1
