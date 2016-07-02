@@ -39,8 +39,4 @@ Kafka processor consumes the **newly published**(does not read from beginning cu
 * Date range country leaderboard:  
     `GET http://localhost:8292/api/national_leaderboard?start=20160101&end=20160101`  
     `Output:`  
-    `[{"England":2},{"India":2},{"Pakistan":1},{"USA":1}]`  
-
-
-```
-## 
+    `[{"England":2},{"India":2},{"Pakistan":1},{"USA":1}]`
