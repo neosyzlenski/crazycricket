@@ -1,5 +1,7 @@
 package com.bfm.acs.crazycricket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -16,12 +18,19 @@ import com.bfm.acs.crazycricket.rest.CrazyCricketServiceConfig;
  *
  */
 @SpringBootApplication
-public class Application{    
+public class Application{
+	private static final Logger LOG = LoggerFactory.getLogger(Application.class);
+	
 	public static void main(final String[] args) throws InterruptedException {
+		if(args.length == 0){
+			LOG.error("Kafka broker cannot be null, exiting...");
+			System.exit(1);
+		}
+		
 		//Trigger Spring application and REST service
     	ApplicationContext app = SpringApplication.run(Application.class, args);
     	CrazyCricketServiceConfig serviceConfig = app.getBean(CrazyCricketServiceConfig.class);
-    	System.out.println("Crazy Cricket REST Service started at: " + serviceConfig.toString());
+    	LOG.info(String.format("Crazy Cricket REST Service started at: %s", serviceConfig.toString()));
     	
     	//Trigger Kafka game event processor
     	DataStore dataStore = app.getBean(DataStore.class);

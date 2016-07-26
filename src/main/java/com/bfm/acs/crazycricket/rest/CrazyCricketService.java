@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bfm.acs.crazycricket.data.DataStore;
+import com.bfm.acs.crazycricket.data.InvalidDateRangeException;
 
 /**
  * REST Controller for handling crazy requests
@@ -31,14 +32,20 @@ public class CrazyCricketService {
 	@RequestMapping(value = "/leaderboard")
 	public List<Map<String, Long>> getLeaderBoard(
 			@RequestParam(name = "start", required = false) String startDate, 
-			@RequestParam(name = "end", required = false) String endDate){
+			@RequestParam(name = "end", required = false) String endDate) throws InvalidDateRangeException{
+		
+		dataStore.validateDate(startDate, endDate);
+		
 		return dataStore.getLeaderBoard(startDate, endDate);
 	}
 	
 	@RequestMapping(value = "/national_leaderboard")
 	public List<Map<String, Long>> getNationalLeaderBoard(
 			@RequestParam(name = "start", required = false) String startDate, 
-			@RequestParam(name = "end", required = false) String endDate){
+			@RequestParam(name = "end", required = false) String endDate) throws InvalidDateRangeException{
+		
+		dataStore.validateDate(startDate, endDate);
+		
 		return dataStore.getNationalLeaderBoard(startDate, endDate);
 	}
 }

@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -175,5 +177,54 @@ public class HsqlDataStoreImpl implements DataStore{
 		});
 		
 		return leaders;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.bfm.acs.crazycricket.data.DataStore#validateDate(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean validateDate(String startDate, String endDate) throws InvalidDateRangeException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String matcher = "([0-9]{4})([0-9]{2})([0-9]{2})";
+		
+		//Either both must be null or both must be not null
+		if((startDate != null && endDate == null) || startDate == null && endDate != null){
+			LOG.error("Either start date or end date is null");
+			throw new InvalidDateRangeException("Either both dates must be null or both not null");
+		}
+		
+		//Dates must be in expected format
+		if(startDate != null && !startDate.equals("")){
+			if(!startDate.matches(matcher)){
+				LOG.error(String.format("Invalid start date: %s", startDate));
+				throw new InvalidDateRangeException("Invalid start date, expected format: yyyyMMdd");
+			}
+			
+			sdf = new SimpleDateFormat("yyyyMMdd");
+			try {
+				sdf.parse(startDate);
+			} catch (ParseException e) {
+				LOG.error(String.format("Invalid start date: %s", startDate));
+				throw new InvalidDateRangeException("Invalid start date, expected format: yyyyMMdd");
+			}
+		}
+		
+		if(endDate != null && !endDate.equals("")){
+			try {
+				if(!endDate.matches(matcher)){
+					LOG.error(String.format("Invalid end date: %s", endDate));
+					throw new InvalidDateRangeException("Invalid end date, expected format: yyyyMMdd");
+				}
+				
+				sdf.parse(endDate);
+			} catch (ParseException e) {
+				LOG.error(String.format("Invalid end date: %s", endDate));
+				throw new InvalidDateRangeException("Invalid end date, expected format: yyyyMMdd");
+			}
+		}
+		
+		LOG.info("Date validation successfull");
+		
+		return true;
 	}
 }

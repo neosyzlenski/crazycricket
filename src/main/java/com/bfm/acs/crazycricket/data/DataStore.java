@@ -39,4 +39,14 @@ public interface DataStore {
 	 * @return list of leader country names and their win counts
 	 */
 	List<Map<String, Long>> getNationalLeaderBoard(String startDate, String endDate);
+	
+	/**
+	 * Validates both dates must be present or dates if not null are in expected format(yyyyMMdd)
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 * @return true/false
+	 * @throws InvalidDateRangeException
+	 */
+	boolean validateDate(String startDate, String endDate) throws InvalidDateRangeException;
 }
