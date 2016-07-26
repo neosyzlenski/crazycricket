@@ -42,3 +42,8 @@ Kafka processor consumes the **newly published**(does not read from beginning cu
     `GET http://localhost:8292/api/national_leaderboard?start=20160101&end=20160101`  
     `Output:`  
     `[{"England":2},{"India":2},{"Pakistan":1},{"USA":1}]`
+* Invalid date range country leaderboard:  
+    `GET http://localhost:8292/api/national_leaderboard?start=20160101&end=2016010`  
+    `Output:`  
+    `{"timestamp":1469570445922,"status":400,"error":"Bad Request","exception":"com.bfm.acs.crazycricket.data.InvalidDateRangeException","message":"Invalid end date, expected format: yyyyMMdd","path":"/api/national_leaderboard"}`
+    
