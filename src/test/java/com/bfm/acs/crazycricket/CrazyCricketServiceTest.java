@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { Application.class })
+@SpringApplicationConfiguration(classes = { Application.class, TestConfiguration.class })
 @WebAppConfiguration
 public class CrazyCricketServiceTest {
 	@InjectMocks
@@ -131,5 +131,32 @@ public class CrazyCricketServiceTest {
             	.accept(MediaType.APPLICATION_JSON))
             	.andExpect(status().isOk())
             	.andExpect(jsonPath("$", hasSize(0)));
+    }
+    
+    @Test
+    public void testInvalidDateRangeExceptionIsThrownForInvalidStartDate() throws Exception{
+    	mvc.perform(get("/api/national_leaderboard?start=2016020&end=20160101")
+            	.accept(MediaType.APPLICATION_JSON))
+            	//.andExpect(status().isBadRequest()) //Spring Test MVC returning 500 instead of 400
+            	.andExpect(jsonPath("$.exception", is("com.bfm.acs.crazycricket.data.InvalidDateRangeException")))
+            	.andExpect(jsonPath("$.message", is("Invalid start date, expected format: yyyyMMdd")));
+    }
+    
+    @Test
+    public void testInvalidDateRangeExceptionIsThrownForInvalidEndDate() throws Exception{
+    	mvc.perform(get("/api/national_leaderboard?start=20160201&end=2016010")
+            	.accept(MediaType.APPLICATION_JSON))
+            	//.andExpect(status().isBadRequest())
+            	.andExpect(jsonPath("$.exception", is("com.bfm.acs.crazycricket.data.InvalidDateRangeException")))
+            	.andExpect(jsonPath("$.message", is("Invalid end date, expected format: yyyyMMdd")));
+    }
+    
+    @Test
+    public void testInvalidDateRangeExceptionIsThrownForMissingEndDate() throws Exception{
+    	mvc.perform(get("/api/national_leaderboard?start=20160201")
+            	.accept(MediaType.APPLICATION_JSON))
+            	//.andExpect(status().isBadRequest())
+            	.andExpect(jsonPath("$.exception", is("com.bfm.acs.crazycricket.data.InvalidDateRangeException")))
+            	.andExpect(jsonPath("$.message", is("Either both dates must be null or both not null")));
     }
 }
