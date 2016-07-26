@@ -1,6 +1,6 @@
 # Crazy Cricket
 
-Proposed solution for Crazy Cricket challenge asked by [Black Rock](https://github.com/blackrock/crazy-cricket).
+Proposed solution for Crazy Cricket challenge asked by [Black Rock](https://github.com/blackrock/crazy-cricket). The solution contains two modules - a Kafka Processor & a REST service. Kafka Processor consumes game events from provided broker and store them in an in-memory HSQL database. REST service exposes end points for handling expected requests for game statistics with parameter validations. 
 
 ## Setup & Run
 ```
